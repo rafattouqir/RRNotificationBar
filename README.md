@@ -30,3 +30,9 @@ let notificationBar = RRNotificationBar()
 //after showing,hide if needed before timeout
 notificationBar.hide()
 ```
+
+## License
+[MIT LICENSE](LICENSE.md)
+
+To the extent possible under law, [RAFAT](mailto:rafsun.ra@gmail.com) has waived all copyright and related or neighboring rights to this work.
+
