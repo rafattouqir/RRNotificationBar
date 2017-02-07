@@ -267,6 +267,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = WMLFHSKDX5;
 				INFOPLIST_FILE = RRNotificationBar/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = me.rafsun.RRNotificationBar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -280,6 +281,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = WMLFHSKDX5;
 				INFOPLIST_FILE = RRNotificationBar/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = me.rafsun.RRNotificationBar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -306,6 +308,7 @@
 				575664FE1E4846A000273DA2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
