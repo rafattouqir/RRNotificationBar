@@ -1,4 +1,4 @@
-## RRNotificationBar [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
+## RRNotificationBar [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/rafattouqir/RRNotificationBar)
 > iOS 10 like notification bar.
 
 **iOS 10** like notification bar designed for in-app notification message showing for iOS 10 and bellow versions.In iOS 9~10, it can be used to show after in-app remote notification is received and for multiple purposes.
