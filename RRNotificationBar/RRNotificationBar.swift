@@ -9,7 +9,7 @@
 import UIKit
 
 
-class RRNotificationBar{
+open class RRNotificationBar{
     
     lazy var rrNotificationView:RRNotificationView = {
         let notificationView = RRNotificationView()
@@ -36,16 +36,16 @@ class RRNotificationBar{
         case showing,hiding,hidden
     }
     
-    let padding:CGFloat = 8
+    public var padding:CGFloat = 8
     let height:CGFloat = 60
-    let notificationViewCornerRadius:CGFloat = 12
+    public var notificationViewCornerRadius:CGFloat = 12
     let isStatusBarHidden = true
     var notificationVisibility:NotificationVisibility = .hidden
-    var animationDuration:Double = 0.7
-    var dismissDelay:Double = 2.0
+    public var animationDuration:Double = 0.7
+    public var dismissDelay:Double = 2.0
     var tapBlock:(()->())?
     
-    init() {
+    public init() {
         //        guard let rrNotificationView = rrNotificationView else { return }
         rrNotificationView.viewHolder.layer.cornerRadius = notificationViewCornerRadius
         rrNotificationView.viewHolder.clipsToBounds = true
@@ -87,7 +87,7 @@ class RRNotificationBar{
      - Parameter onTap: On tap block which will be triggered when user has tapped on the notification bar.
      
      */
-    func show(title:String = "",message:String = "",time:String = "",onTap:(()->())? = nil) {
+    public func show(title:String = "",message:String = "",time:String = "",onTap:(()->())? = nil) {
         
         //        guard let rrNotificationView = rrNotificationView else { return }
         
@@ -110,7 +110,7 @@ class RRNotificationBar{
         })
         
     }
-    func hide() {
+    public func hide() {
         
         UIView.animate(withDuration: animationDuration, delay: 0.0, usingSpringWithDamping: 0.9, initialSpringVelocity: 1.0, options: [.curveEaseIn,.allowUserInteraction], animations: { [weak self] in
             guard let strongSelf = self
@@ -159,7 +159,7 @@ class RRNotificationView:UIView{
     
     lazy var imageView:UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = .red
+        imageView.backgroundColor = .lightGray
         
         if let lastIcon = getAppIconName{
             let icon = UIImage(named: lastIcon)
