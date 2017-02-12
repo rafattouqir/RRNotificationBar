@@ -20,12 +20,11 @@ open class RRNotificationBar:NSObject{
     }()
     var topConstraint:NSLayoutConstraint = NSLayoutConstraint()
     
-    
-    let viewController = RRNotificationViewController()
     lazy var window:UIWindow = {
         
         let window = UIWindow(frame:UIScreen.main.bounds)
-        window.rootViewController = self.viewController
+        //Need to assign placeholder rootViewController due to iOS's device rotation call back doesn't work (for Autolayout) without rootview controller
+        window.rootViewController = UIViewController()
         window.windowLevel = UIWindowLevelStatusBar
         window.isHidden = false
         return window
@@ -53,8 +52,6 @@ open class RRNotificationBar:NSObject{
         rrNotificationView.viewHolder.clipsToBounds = true
         rrNotificationView.buttonClose.addTarget(self, action: #selector(dismissed), for: .touchUpInside)
         
-//        NotificationCenter.default.addObserver(self, selector: #selector(RRNotificationBar.didRotated), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
-        
         
         window.addSubview(rrNotificationView)
         window.addConstraintsWithFormat(format: "H:|-\(padding)-[v0]-\(padding)-|", views: rrNotificationView)
@@ -64,27 +61,6 @@ open class RRNotificationBar:NSObject{
         self.window.layoutIfNeeded()
     }
     
-//    deinit {
-//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
-//    }
-//    
-//    func didRotated(notification: NSNotification){
-//        switch UIDevice.current.orientation {
-//        case let x where x.isPortrait:
-//            //Portrait
-//            print("IsPortrait \(UIDevice.current.orientation.isPortrait)")
-//            window.frame = UIScreen.main.bounds
-//            window.layoutIfNeeded()
-//        case let x where x.isLandscape:
-//            //Landscape
-//            print("IsLandscape \(UIDevice.current.orientation.isLandscape)")
-//            window.frame = UIScreen.main.bounds
-//            window.layoutIfNeeded()
-//        default:
-//            break
-//        }
-//        
-//    }
     
     func dismissed(){
         hide()
@@ -155,9 +131,6 @@ open class RRNotificationBar:NSObject{
     
 }
 
-class RRNotificationViewController:UIViewController{
-    
-}
 
 //MARK: - RRNotificationView is the view that is shown in RRNotificationBar
 class RRNotificationView:UIView{

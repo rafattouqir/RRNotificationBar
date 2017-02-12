@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "RRNotificationBar"
-  s.version      = "1.0.1"
+  s.version      = "1.0.2"
   s.summary      = "iOS 10 custom notification bar for iOS 9+"
 
   # This description is used to generate tags and improve search results.
