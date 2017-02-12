@@ -9,26 +9,25 @@
 import UIKit
 
 
-open class RRNotificationBar{
+open class RRNotificationBar:NSObject{
     
     lazy var rrNotificationView:RRNotificationView = {
         let notificationView = RRNotificationView()
+        notificationView.translatesAutoresizingMaskIntoConstraints = false
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(notificationViewDidTapped))
         notificationView.addGestureRecognizer(tapGesture)
         return notificationView
     }()
     var topConstraint:NSLayoutConstraint = NSLayoutConstraint()
     
-    let window:UIWindow = {
+    
+    let viewController = RRNotificationViewController()
+    lazy var window:UIWindow = {
         
-        guard let window = UIApplication.shared.keyWindow else{
-            
-            //we should get keywindow,otherwise generate it
-            let window = UIWindow(frame:UIScreen.main.bounds)
-            window.makeKeyAndVisible()
-            return window
-        }
-        
+        let window = UIWindow(frame:UIScreen.main.bounds)
+        window.rootViewController = self.viewController
+        window.windowLevel = UIWindowLevelStatusBar
+        window.isHidden = false
         return window
     }()
     
@@ -39,19 +38,22 @@ open class RRNotificationBar{
     public var padding:CGFloat = 8
     let height:CGFloat = 60
     public var notificationViewCornerRadius:CGFloat = 12
-    let isStatusBarHidden = true
     var notificationVisibility:NotificationVisibility = .hidden
     public var animationDuration:Double = 0.7
     public var dismissDelay:Double = 2.0
     var tapBlock:(()->())?
     
-    public init() {
+    
+    
+    
+    public override init() {
+        super.init()
         //        guard let rrNotificationView = rrNotificationView else { return }
         rrNotificationView.viewHolder.layer.cornerRadius = notificationViewCornerRadius
         rrNotificationView.viewHolder.clipsToBounds = true
+        rrNotificationView.buttonClose.addTarget(self, action: #selector(dismissed), for: .touchUpInside)
         
-        rrNotificationView.buttonClose.addTarget(self, action: #selector(dismiss), for: .touchUpInside)
-        
+//        NotificationCenter.default.addObserver(self, selector: #selector(RRNotificationBar.didRotated), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
         
         
         window.addSubview(rrNotificationView)
@@ -62,15 +64,37 @@ open class RRNotificationBar{
         self.window.layoutIfNeeded()
     }
     
-    @objc func dismiss(){
+//    deinit {
+//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
+//    }
+//    
+//    func didRotated(notification: NSNotification){
+//        switch UIDevice.current.orientation {
+//        case let x where x.isPortrait:
+//            //Portrait
+//            print("IsPortrait \(UIDevice.current.orientation.isPortrait)")
+//            window.frame = UIScreen.main.bounds
+//            window.layoutIfNeeded()
+//        case let x where x.isLandscape:
+//            //Landscape
+//            print("IsLandscape \(UIDevice.current.orientation.isLandscape)")
+//            window.frame = UIScreen.main.bounds
+//            window.layoutIfNeeded()
+//        default:
+//            break
+//        }
+//        
+//    }
+    
+    func dismissed(){
         hide()
         
     }
-    @objc func notificationViewDidTapped(gesture:UITapGestureRecognizer){
+    func notificationViewDidTapped(gesture:UITapGestureRecognizer){
         
         //Exclude the dismiss button, otherwise execute notification bar tap
         guard let view = gesture.view,let filteredView = view.hitTest(gesture.location(in: view),with:nil),
-        filteredView !== rrNotificationView.buttonClose else { return }
+            filteredView !== rrNotificationView.buttonClose else { return }
         
         
         self.tapBlock?()
@@ -95,11 +119,12 @@ open class RRNotificationBar{
         rrNotificationView.labelSubTitle.text = message
         rrNotificationView.labelTime.text = time.isEmpty ? "now" : time
         tapBlock = onTap
-        UIApplication.shared.isStatusBarHidden = isStatusBarHidden
+        
         UIView.animate(withDuration: animationDuration, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1.0, options: [.curveEaseOut,.allowUserInteraction], animations: { [unowned self] in
             self.notificationVisibility = .showing
             self.topConstraint.constant = 0 + self.padding
             self.window.layoutIfNeeded()
+            self.rrNotificationView.layoutIfNeeded()
             }, completion: { isCompleted in
                 DispatchQueue.main.asyncAfter(deadline: .now() + self.dismissDelay, execute: { //[unowned self] in
                     guard let strongSelf = Optional(self) else { return }
@@ -119,17 +144,20 @@ open class RRNotificationBar{
             strongSelf.notificationVisibility = .hiding
             strongSelf.topConstraint.constant = -(strongSelf.rrNotificationView.bounds.height + (2*strongSelf.padding))
             strongSelf.window.layoutIfNeeded()
+            strongSelf.rrNotificationView.layoutIfNeeded()
             }, completion: { isCompleted in
                 self.notificationVisibility = .hidden
-                UIApplication.shared.isStatusBarHidden = !(self.isStatusBarHidden)
                 self.rrNotificationView.removeFromSuperview()
+                self.window.isHidden = true
         })
         
     }
     
 }
 
-
+class RRNotificationViewController:UIViewController{
+    
+}
 
 //MARK: - RRNotificationView is the view that is shown in RRNotificationBar
 class RRNotificationView:UIView{
@@ -228,7 +256,7 @@ class RRNotificationView:UIView{
     let buttonClose:UIButton = {
         
         let button = UIButton()
-//        button.backgroundColor = .red
+        //        button.backgroundColor = .red
         let darkView = DarkView()
         darkView.isUserInteractionEnabled = false
         darkView.backgroundColor = .lightGray
